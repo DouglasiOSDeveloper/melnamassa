@@ -1,6 +1,6 @@
 import { useState, FormEvent } from 'react';
-import logo from 'figma:asset/c84c38536fd44464d6ab3d0da144cf9e5f0c09b4.png';
-import arcoBg from 'figma:asset/6679f71250d087a15c95482436e797a5907ee737.png';
+import logo from './assets/c84c38536fd44464d6ab3d0da144cf9e5f0c09b4.png';
+import arcoBg from './assets/6679f71250d087a15c95482436e797a5907ee737.png';
 import { LeadForm } from './components/LeadForm';
 import { VideoPlayer } from './components/VideoPlayer';
 
@@ -12,7 +12,7 @@ const CONFIG = {
   // ⚠️ IMPORTANTE: Cole aqui a URL do seu Web App do Google Apps Script
   // Formato: https://script.google.com/macros/s/SEU_ID_AQUI/exec
   // A URL deve terminar com /exec
-  googleSheetsEndpoint: 'https://script.google.com/macros/s/AKfycbz-zxdGoFWRkQCE9__WtoFUGas5bbgH3J9VFGG6k8p72ZRo00dGK4oL_2M2zSFsH-t3FA/exec',
+  googleSheetsEndpoint: 'https://script.google.com/macros/s/AKfycbzXVW9sUEuvfdbKZJA2roKFFRiRqCAp-78UQbCHUUisTahYf1wDo1QVPAfsm5XqA6BOLw/exec',
   
   video: {
     type: 'youtube' as 'youtube' | 'drive', // Altere para 'drive' se necessário
@@ -29,76 +29,44 @@ interface FormData {
 export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (formData: FormData) => {
-    console.log('🚀 Iniciando envio do formulário...');
-    console.log('📦 Dados a serem enviados:', formData);
-    console.log('🔗 Endpoint:', CONFIG.googleSheetsEndpoint);
-    
-    setIsSubmitting(true);
+const handleSubmit = async (formData: FormData) => {
+  console.log('🚀 Iniciando envio do formulário...');
+  console.log('📦 Dados a serem enviados:', formData);
+  console.log('🔗 Endpoint:', CONFIG.googleSheetsEndpoint);
 
-    try {
-      // Preparar payload
-      const payload = {
-        name: formData.name,
-        whatsapp: formData.whatsapp,
-        email: formData.email,
-      };
+  setIsSubmitting(true);
 
-      console.log('📤 Enviando requisição POST...');
-      console.log('📋 Payload JSON:', JSON.stringify(payload, null, 2));
-      
-      // Enviar dados para Google Sheets
-      const response = await fetch(CONFIG.googleSheetsEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-        redirect: 'follow',
-      });
+  try {
+    // Montar corpo como form-urlencoded (chave=valor&...)
+    const body = new URLSearchParams({
+      name: formData.name,
+      whatsapp: formData.whatsapp,
+      email: formData.email,
+    });
 
-      console.log('📥 Resposta recebida. Status:', response.status);
-      console.log('📊 Status OK?', response.ok);
-      console.log('📍 URL final:', response.url);
-      
-      // Tentar ler a resposta como texto
-      const responseText = await response.text();
-      console.log('📄 Resposta do servidor (texto):', responseText);
-      
-      // Tentar parsear como JSON
-      try {
-        const responseJson = JSON.parse(responseText);
-        console.log('📋 Resposta do servidor (JSON):', responseJson);
-      } catch (jsonError) {
-        console.log('ℹ️ Resposta não é JSON válido');
-      }
+    console.log('📤 Enviando requisição POST (form-urlencoded, no-cors)...');
 
-      if (response.ok) {
-        console.log('✅ Dados enviados com sucesso para a planilha!');
-      } else {
-        console.warn('⚠️ Resposta não OK, mas continuando...', response.status);
-      }
+    await fetch(CONFIG.googleSheetsEndpoint, {
+      method: 'POST',
+      mode: 'no-cors', // evita erro de CORS, mesmo sem poder ler resposta
+      body,            // NÃO coloca headers, o navegador já manda application/x-www-form-urlencoded
+    });
 
-    } catch (error) {
-      console.error('❌ Erro ao enviar dados para a planilha:', error);
-      console.error('🔍 Detalhes do erro:', {
-        message: error instanceof Error ? error.message : 'Erro desconhecido',
-        type: error instanceof Error ? error.constructor.name : typeof error,
-      });
-      console.warn('⚠️ O usuário será redirecionado mesmo com erro no envio');
-    } finally {
-      // Garantir que o loading seja desativado
-      console.log('🔄 Finalizando envio e resetando estado de loading...');
-      setIsSubmitting(false);
-    }
+    console.log('✅ Requisição enviada (não conseguimos ler a resposta por causa do no-cors, mas o Apps Script recebe).');
+  } catch (error) {
+    console.error('❌ Erro ao enviar dados para a planilha:', error);
+    console.warn('⚠️ O usuário será redirecionado mesmo com erro no envio');
+  } finally {
+    console.log('🔄 Finalizando envio e resetando estado de loading...');
+    setIsSubmitting(false);
+  }
 
-    // Redirecionar para WhatsApp após 1 segundo
-    console.log('🔀 Redirecionando para WhatsApp em 1 segundo...');
-    setTimeout(() => {
-      console.log('➡️ Redirecionando agora para:', CONFIG.whatsappGroupUrl);
-      window.location.href = CONFIG.whatsappGroupUrl;
-    }, 1000);
-  };
+  console.log('🔀 Redirecionando para WhatsApp em 1 segundo...');
+  setTimeout(() => {
+    console.log('➡️ Redirecionando agora para:', CONFIG.whatsappGroupUrl);
+    window.location.href = CONFIG.whatsappGroupUrl;
+  }, 1000);
+};
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
