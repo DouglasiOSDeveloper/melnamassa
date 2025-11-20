@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import logo from './assets/c84c38536fd44464d6ab3d0da144cf9e5f0c09b4.png';
 import arcoBg from './assets/6679f71250d087a15c95482436e797a5907ee737.png';
 import { LeadForm } from './components/LeadForm';
@@ -7,7 +7,8 @@ import { VideoPlayer } from './components/VideoPlayer';
 // Configurações
 const CONFIG = {
   whatsappGroupUrl: 'https://chat.whatsapp.com/SEU_LINK_DO_GRUPO',
-  googleSheetsEndpoint: 'https://script.google.com/macros/s/AKfycbzXVW9sUEuvfdbKZJA2roKFFRiRqCAp-78UQbCHUUisTahYf1wDo1QVPAfsm5XqA6BOLw/exec',
+  googleSheetsEndpoint:
+    'https://script.google.com/macros/s/AKfycbzXVW9sUEuvfdbKZJA2roKFFRiRqCAp-78UQbCHUUisTahYf1wDo1QVPAfsm5XqA6BOLw/exec',
   video: {
     type: 'youtube' as 'youtube' | 'drive',
     url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
@@ -22,6 +23,22 @@ interface FormData {
 
 export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // controla se é desktop ou mobile
+  const [isDesktop, setIsDesktop] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth >= 1024;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === 'undefined') return;
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSubmit = async (formData: FormData) => {
     console.log('🚀 Iniciando envio do formulário...');
@@ -61,6 +78,42 @@ export default function App() {
     }, 1000);
   };
 
+  // blocos reaproveitáveis
+  const Logo = (
+    <div className="flex justify-start">
+      <img src={logo} alt="Mel na Massa" className="h-20 lg:h-24 w-auto" />
+    </div>
+  );
+
+  const Headline = (
+    <div className="space-y-4">
+      <h1
+        className="text-[#a2542c]"
+        style={{
+          fontFamily: 'Poppins, sans-serif',
+          fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+          lineHeight: '1.2',
+          fontWeight: '700',
+        }}
+      >
+        Descubra como transformar o pão de mel em uma renda de{' '}
+        <span
+          className="inline-block relative"
+          style={{
+            fontWeight: '800',
+            textDecoration: 'underline',
+            textDecorationColor: '#fed578',
+            textDecorationThickness: '4px',
+            textUnderlineOffset: '4px',
+          }}
+        >
+          R$1.000 a R$3.000 por mês, começando com
+        </span>{' '}
+        o que você tem em casa.
+      </h1>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Arco de fundo */}
@@ -75,69 +128,43 @@ export default function App() {
       {/* Container principal */}
       <div className="relative z-10 min-h-screen flex items-center">
         <div className="container mx-auto px-6 py-12 max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Coluna esquerda - Logo, título, vídeo (mobile) e formulário */}
-            <div className="space-y-8">
-              {/* Logo */}
-              <div className="flex justify-start">
-                <img
-                  src={logo}
-                  alt="Mel na Massa"
-                  className="h-20 lg:h-24 w-auto"
+          {isDesktop ? (
+            // DESKTOP: 2 colunas -> esquerda (logo, título, form) | direita (vídeo)
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              <div className="space-y-8">
+                {Logo}
+                {Headline}
+
+                <LeadForm
+                  onSubmit={handleSubmit}
+                  isSubmitting={isSubmitting}
                 />
               </div>
 
-              {/* Headline */}
-              <div className="space-y-4">
-                <h1
-                  className="text-[#a2542c]"
-                  style={{
-                    fontFamily: 'Poppins, sans-serif',
-                    fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                    lineHeight: '1.2',
-                    fontWeight: '700',
-                  }}
-                >
-                  Descubra como transformar o pão de mel em uma renda de{' '}
-                  <span
-                    className="inline-block relative"
-                    style={{
-                      fontWeight: '800',
-                      textDecoration: 'underline',
-                      textDecorationColor: '#fed578',
-                      textDecorationThickness: '4px',
-                      textUnderlineOffset: '4px',
-                    }}
-                  >
-                    R$1.000 a R$3.000 por mês, começando com
-                  </span>{' '}
-                  o que você tem em casa.
-                </h1>
-              </div>
-
-              {/* Vídeo - aparece aqui só no mobile (título → vídeo → formulário) */}
-              <div className="lg:hidden">
+              <div className="lg:pl-8">
                 <VideoPlayer
                   type={CONFIG.video.type}
                   url={CONFIG.video.url}
                 />
               </div>
+            </div>
+          ) : (
+            // MOBILE: 1 coluna -> logo, título, VÍDEO, formulário
+            <div className="space-y-8">
+              {Logo}
+              {Headline}
 
-              {/* Formulário */}
+              <VideoPlayer
+                type={CONFIG.video.type}
+                url={CONFIG.video.url}
+              />
+
               <LeadForm
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
               />
             </div>
-
-            {/* Coluna direita - Vídeo (somente desktop) */}
-            <div className="hidden lg:block lg:pl-8">
-              <VideoPlayer
-                type={CONFIG.video.type}
-                url={CONFIG.video.url}
-              />
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
