@@ -6,12 +6,12 @@ import { VideoPlayer } from './components/VideoPlayer';
 
 // Configurações
 const CONFIG = {
-  whatsappGroupUrl: 'https://chat.whatsapp.com/SEU_LINK_DO_GRUPO',
+  whatsappGroupUrl: 'https://chat.whatsapp.com/Im5GVOwIUcq5pZuAAZoigB?mode=hqrt1',
   googleSheetsEndpoint:
     'https://script.google.com/macros/s/AKfycbzXVW9sUEuvfdbKZJA2roKFFRiRqCAp-78UQbCHUUisTahYf1wDo1QVPAfsm5XqA6BOLw/exec',
   video: {
-    type: 'youtube' as 'youtube' | 'drive',
-    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    type: 'drive' as 'youtube' | 'drive',
+    url: 'https://drive.google.com/file/d/1qHCWla-J9JLJRopKyBeViDsPRmVU_9FX/view?usp=drivesdk',
   },
 };
 
@@ -118,20 +118,21 @@ export default function App() {
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Arco de fundo */}
       <div
-        className="absolute left-0 top-0 bottom-0 w-1/2 bg-no-repeat bg-contain bg-left-top opacity-30 pointer-events-none"
+        className="absolute left-0 top-0 bottom-0 w-2/3 bg-no-repeat bg-contain bg-left-top opacity-90 pointer-events-none"
         style={{
           backgroundImage: `url(${arcoBg})`,
-          backgroundSize: 'auto 100%',
+          backgroundSize: 'auto 110%',
         }}
       />
 
       {/* Container principal */}
       <div className="relative z-10 min-h-screen flex items-center">
-        <div className="container mx-auto px-6 py-12 max-w-7xl">
+        <div className="mx-auto px-6 lg:px-12 py-12 w-full">
           {isDesktop ? (
-            // DESKTOP: 2 colunas -> esquerda (logo, título, form) | direita (vídeo)
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <div className="space-y-8">
+            // DESKTOP: 2 colunas -> esquerda (logo, título, form) | direita (vídeo grande encostado à direita)
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              {/* Coluna esquerda mais estreita, como no layout de referência */}
+              <div className="space-y-8 max-w-xl">
                 {Logo}
                 {Headline}
 
@@ -141,15 +142,18 @@ export default function App() {
                 />
               </div>
 
-              <div className="lg:pl-8">
-                <VideoPlayer
-                  type={CONFIG.video.type}
-                  url={CONFIG.video.url}
-                />
+              {/* Coluna direita com vídeo maior e alinhado à direita */}
+              <div className="flex justify-end lg:pl-8">
+                <div className="w-full max-w-xl lg:max-w-2xl">
+                  <VideoPlayer
+                    type={CONFIG.video.type}
+                    url={CONFIG.video.url}
+                  />
+                </div>
               </div>
             </div>
           ) : (
-            // MOBILE: 1 coluna -> logo, título, VÍDEO, formulário
+            // MOBILE: 1 coluna -> logo, título, vídeo, formulário
             <div className="space-y-8">
               {Logo}
               {Headline}
