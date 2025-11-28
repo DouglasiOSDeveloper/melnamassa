@@ -10,8 +10,8 @@ const CONFIG = {
   googleSheetsEndpoint:
     'https://script.google.com/macros/s/AKfycbzXVW9sUEuvfdbKZJA2roKFFRiRqCAp-78UQbCHUUisTahYf1wDo1QVPAfsm5XqA6BOLw/exec',
   video: {
-    type: 'drive' as 'youtube' | 'drive',
-    url: 'https://drive.google.com/file/d/1qHCWla-J9JLJRopKyBeViDsPRmVU_9FX/view?usp=drivesdk',
+    type: 'youtube' as 'youtube' | 'drive',
+    url: 'https://youtu.be/MN_FAE8aW7Q',
   },
 };
 
