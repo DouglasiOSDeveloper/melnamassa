@@ -37,9 +37,7 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
   };
 
   const validateWhatsApp = (whatsapp: string): boolean => {
-    // Remove caracteres não numéricos
     const numbers = whatsapp.replace(/\D/g, '');
-    // Aceita de 10 a 11 dígitos (DDD + número)
     return numbers.length >= 10 && numbers.length <= 11;
   };
 
@@ -83,7 +81,6 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
       [name]: value,
     }));
 
-    // Limpar erro quando o usuário começar a digitar
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({
         ...prev,
@@ -101,8 +98,7 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Marcar todos os campos como touched
+
     setTouched({
       name: true,
       whatsapp: true,
@@ -117,7 +113,7 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
   return (
     <form id="lead-form" onSubmit={handleSubmit} className="space-y-6">
       {/* Texto auxiliar */}
-      <p 
+      <p
         className="text-[#a2542c] opacity-70 italic"
         style={{
           fontSize: '0.95rem',
@@ -136,10 +132,11 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
           onChange={handleChange}
           onBlur={() => handleBlur('name')}
           placeholder="Como podemos te chamar?"
-          className={`w-full px-4 py-3 rounded-lg border-2 bg-white transition-colors
-            ${touched.name && errors.name 
-              ? 'border-red-500 focus:border-red-500' 
-              : 'border-[#a2542c] focus:border-[#a2542c]'
+          className={`w-full px-4 py-3 rounded-md border-2 bg-white transition-colors
+            ${
+              touched.name && errors.name
+                ? 'border-red-500 focus:border-red-500'
+                : 'border-[#a2542c] focus:border-[#a2542c]'
             }
             focus:outline-none focus:ring-2 focus:ring-[#a2542c]/20
             placeholder:text-[#a2542c]/40`}
@@ -162,10 +159,11 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
           onChange={handleChange}
           onBlur={() => handleBlur('whatsapp')}
           placeholder="Seu número do WhatsApp:"
-          className={`w-full px-4 py-3 rounded-lg border-2 bg-white transition-colors
-            ${touched.whatsapp && errors.whatsapp 
-              ? 'border-red-500 focus:border-red-500' 
-              : 'border-[#a2542c] focus:border-[#a2542c]'
+          className={`w-full px-4 py-3 rounded-md border-2 bg-white transition-colors
+            ${
+              touched.whatsapp && errors.whatsapp
+                ? 'border-red-500 focus:border-red-500'
+                : 'border-[#a2542c] focus:border-[#a2542c]'
             }
             focus:outline-none focus:ring-2 focus:ring-[#a2542c]/20
             placeholder:text-[#a2542c]/40`}
@@ -188,10 +186,11 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
           onChange={handleChange}
           onBlur={() => handleBlur('email')}
           placeholder="Seu melhor e-mail:"
-          className={`w-full px-4 py-3 rounded-lg border-2 bg-white transition-colors
-            ${touched.email && errors.email 
-              ? 'border-red-500 focus:border-red-500' 
-              : 'border-[#a2542c] focus:border-[#a2542c]'
+          className={`w-full px-4 py-3 rounded-md border-2 bg-white transition-colors
+            ${
+              touched.email && errors.email
+                ? 'border-red-500 focus:border-red-500'
+                : 'border-[#a2542c] focus:border-[#a2542c]'
             }
             focus:outline-none focus:ring-2 focus:ring-[#a2542c]/20
             placeholder:text-[#a2542c]/40`}
@@ -205,26 +204,29 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
       </div>
 
       {/* Botão de envio */}
-      <button
-        type="submit"
-        id="submit-btn"
-        disabled={!isFormValid() || isSubmitting}
-        className={`w-full py-4 px-8 rounded-full border-2 border-[#a2542c] 
-          bg-[#fed578] text-[#a2542c] uppercase tracking-wide
-          transition-all duration-200
-          ${isFormValid() && !isSubmitting
-            ? 'hover:bg-[#fec555] hover:shadow-lg hover:scale-[1.02] cursor-pointer' 
-            : 'opacity-50 cursor-not-allowed'
-          }`}
-        style={{
-          fontFamily: 'Poppins, sans-serif',
-          fontWeight: '700',
-          fontSize: '1rem',
-          letterSpacing: '0.05em',
-        }}
-      >
-        {isSubmitting ? 'ENVIANDO...' : 'QUERO GARANTIR MINHA VAGA'}
-      </button>
+      <div className="flex justify-start">
+        <button
+          type="submit"
+          id="submit-btn"
+          disabled={!isFormValid() || isSubmitting}
+          className={`w-1/2 py-4 px-8 rounded-full border-2 border-[#a2542c]
+            bg-[#fed578] text-[#a2542c] uppercase tracking-wide
+            transition-all duration-200
+            ${
+              isFormValid() && !isSubmitting
+                ? 'hover:bg-[#fec555] hover:shadow-lg hover:scale-[1.02] cursor-pointer'
+                : 'opacity-50 cursor-not-allowed'
+            }`}
+          style={{
+            fontFamily: 'Poppins, sans-serif',
+            fontWeight: '700',
+            fontSize: '1rem',
+            letterSpacing: '0.05em',
+          }}
+        >
+          {isSubmitting ? 'ENVIANDO...' : 'QUERO GARANTIR MINHA VAGA'}
+        </button>
+      </div>
     </form>
   );
 }

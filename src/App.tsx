@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import logo from './assets/c84c38536fd44464d6ab3d0da144cf9e5f0c09b4.png';
-import arcoBg from './assets/6679f71250d087a15c95482436e797a5907ee737.png';
+import logo from './assets/logo.png';
+import arcoBg from './assets/arco.png';
 import { LeadForm } from './components/LeadForm';
 import { VideoPlayer } from './components/VideoPlayer';
 
