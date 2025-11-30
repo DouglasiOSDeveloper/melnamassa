@@ -115,13 +115,16 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden">
+      <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Arco de fundo */}
       <div
-        className="absolute left-0 top-0 bottom-0 w-2/3 bg-no-repeat bg-contain bg-left-top opacity-90 pointer-events-none"
+        className="pointer-events-none absolute inset-0 bg-no-repeat"
         style={{
           backgroundImage: `url(${arcoBg})`,
-          backgroundSize: 'auto 110%',
+          // aumenta um pouco a altura pra garantir que cubra topo e rodapé
+          backgroundSize: 'auto 120%',
+          // joga o arco mais pro meio da tela, como no layout de referência
+          backgroundPosition: '60% 0',
         }}
       />
 

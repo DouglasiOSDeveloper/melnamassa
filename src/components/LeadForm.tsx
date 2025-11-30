@@ -203,14 +203,14 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
         )}
       </div>
 
-      {/* Botão de envio */}
+       {/* Botão de envio */}
       <div className="flex justify-start">
         <button
           type="submit"
           id="submit-btn"
           disabled={!isFormValid() || isSubmitting}
-          className={`w-1/2 py-4 px-8 rounded-full border-2 border-[#a2542c]
-            bg-[#fed578] text-[#a2542c] uppercase tracking-wide
+          className={`w-1/2 py-4 px-8 rounded-full
+            bg-[#fed578] text-[#000000] uppercase tracking-wide
             transition-all duration-200
             ${
               isFormValid() && !isSubmitting
@@ -222,6 +222,8 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
             fontWeight: '700',
             fontSize: '1rem',
             letterSpacing: '0.05em',
+            // stroke interno mais grosso
+            boxShadow: 'inset 0 0 0 6px #a2542c',
           }}
         >
           {isSubmitting ? 'ENVIANDO...' : 'QUERO GARANTIR MINHA VAGA'}
