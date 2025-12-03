@@ -96,7 +96,7 @@ export default function App() {
           fontWeight: '700',
         }}
       >
-        Descubra como transformar o pão de mel em uma renda de{' '}
+        Entre agora mesmo no nosso GRUPO VIP e descubra como transformar o pão de mel em uma renda de{' '}
         <span
           className="inline-block relative"
           style={{
