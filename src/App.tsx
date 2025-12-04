@@ -7,19 +7,21 @@ import { VideoPlayer } from './components/VideoPlayer';
 // Configurações
 const CONFIG = {
   whatsappGroupUrl: 'https://chat.whatsapp.com/Im5GVOwIUcq5pZuAAZoigB?mode=hqrt1',
-  googleSheetsEndpoint:
+  /* googleSheetsEndpoint:
     'https://script.google.com/macros/s/AKfycbzXVW9sUEuvfdbKZJA2roKFFRiRqCAp-78UQbCHUUisTahYf1wDo1QVPAfsm5XqA6BOLw/exec',
+  */
   video: {
     type: 'youtube' as 'youtube' | 'drive',
     url: 'https://youtu.be/MN_FAE8aW7Q',
   },
 };
 
-interface FormData {
+/* interface FormData {
   name: string;
   whatsapp: string;
   email: string;
 }
+*/
 
 export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,13 +42,17 @@ export default function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleSubmit = async (formData: FormData) => {
-    console.log('🚀 Iniciando envio do formulário...');
+  // Removido argumento formData pois não existe mais coleta de dados
+  const handleSubmit = async () => {
+    /* console.log('🚀 Iniciando envio do formulário...');
     console.log('📦 Dados a serem enviados:', formData);
     console.log('🔗 Endpoint:', CONFIG.googleSheetsEndpoint);
+    */
 
     setIsSubmitting(true);
 
+    /* --- INÍCIO DO TRECHO COMENTADO DE ENVIO (FETCH) --- */
+    /*
     try {
       const body = new URLSearchParams({
         name: formData.name,
@@ -67,15 +73,18 @@ export default function App() {
       console.error('❌ Erro ao enviar dados para a planilha:', error);
       console.warn('⚠️ O usuário será redirecionado mesmo com erro no envio');
     } finally {
-      console.log('🔄 Finalizando envio e resetando estado de loading...');
-      setIsSubmitting(false);
+      // setIsSubmitting(false); // Mantemos true para o redirecionamento visual
     }
+    */
+    /* --- FIM DO TRECHO COMENTADO DE ENVIO --- */
 
-    console.log('🔀 Redirecionando para WhatsApp em 1 segundo...');
+    console.log('🔀 Redirecionando para WhatsApp...');
+    
+    // Pequeno delay apenas para o usuário ver o botão mudar para "ENTRANDO..."
     setTimeout(() => {
       console.log('➡️ Redirecionando agora para:', CONFIG.whatsappGroupUrl);
       window.location.href = CONFIG.whatsappGroupUrl;
-    }, 1000);
+    }, 1000); 
   };
 
   // blocos reaproveitáveis
@@ -132,9 +141,8 @@ export default function App() {
       <div className="relative z-10 min-h-screen flex items-center">
         <div className="mx-auto px-6 lg:px-12 py-12 w-full">
           {isDesktop ? (
-            // DESKTOP: 2 colunas -> esquerda (logo, título, form) | direita (vídeo grande encostado à direita)
+            // DESKTOP
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              {/* Coluna esquerda mais estreita, como no layout de referência */}
               <div className="space-y-8 max-w-xl">
                 {Logo}
                 {Headline}
@@ -145,7 +153,6 @@ export default function App() {
                 />
               </div>
 
-              {/* Coluna direita com vídeo maior e alinhado à direita */}
               <div className="flex justify-end lg:pl-8">
                 <div className="w-full max-w-xl lg:max-w-2xl">
                   <VideoPlayer
@@ -156,7 +163,7 @@ export default function App() {
               </div>
             </div>
           ) : (
-            // MOBILE: 1 coluna -> logo, título, vídeo, formulário
+            // MOBILE
             <div className="space-y-8">
               {Logo}
               {Headline}
