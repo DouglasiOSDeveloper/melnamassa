@@ -229,7 +229,7 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
             boxShadow: 'inset 0 0 0 6px #a2542c',
           }}
         >
-          {isSubmitting ? 'ENVIANDO...' : 'ENTRAR NO GRUPO AGORA'}
+          {isSubmitting ? 'ENTRANDO...' : 'ENTRAR NO GRUPO AGORA'}
         </button>
       </div>
     </form>
