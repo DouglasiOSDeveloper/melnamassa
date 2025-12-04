@@ -18,6 +18,7 @@ interface FormErrors {
 }
 
 export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
+  // Estado mantido para não quebrar a tipagem, mas iniciará vazio
   const [formData, setFormData] = useState<FormData>({
     name: '',
     whatsapp: '',
@@ -31,6 +32,7 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
     email: false,
   });
 
+  // Funções de validação mantidas caso precise descomentar no futuro
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -105,15 +107,17 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
       email: true,
     });
 
-    if (validateForm()) {
+    // Removida a validação para permitir o envio direto
+    // if (validateForm()) {
       onSubmit(formData);
-    }
+    // }
   };
 
   return (
     <form id="lead-form" onSubmit={handleSubmit} className="space-y-6">
-      {/* Texto auxiliar */}
-      <p
+      
+      {/* --- INÍCIO DA ÁREA COMENTADA DO QUESTIONÁRIO --- */}
+      {/* <p
         className="text-[#a2542c] opacity-70 italic"
         style={{
           fontSize: '0.95rem',
@@ -122,7 +126,6 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
         Preencha as informações abaixo:
       </p>
 
-      {/* Campo Nome */}
       <div className="space-y-2">
         <input
           type="text"
@@ -149,7 +152,6 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
         )}
       </div>
 
-      {/* Campo WhatsApp */}
       <div className="space-y-2">
         <input
           type="tel"
@@ -176,7 +178,6 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
         )}
       </div>
 
-      {/* Campo E-mail */}
       <div className="space-y-2">
         <input
           type="email"
@@ -201,22 +202,24 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
         {touched.email && errors.email && (
           <p className="text-red-500 text-sm">{errors.email}</p>
         )}
-      </div>
+      </div> 
+      */}
+      {/* --- FIM DA ÁREA COMENTADA DO QUESTIONÁRIO --- */}
 
-       {/* Botão de envio */}
+      {/* Botão de envio */}
       <div className="flex justify-start">
         <button
           type="submit"
           id="submit-btn"
-          disabled={!isFormValid() || isSubmitting}
-          className={`w-1/2 py-4 px-8 rounded-full
+          // Botão desabilitado apenas se estiver enviando, mas não depende mais da validação
+          disabled={isSubmitting} 
+          // Classes ajustadas para sempre mostrar o estilo "amarelo" (hover/ativo)
+          className={`w-full py-4 px-8 rounded-full
             bg-[#fed578] text-[#000000] uppercase tracking-wide
             transition-all duration-200
-            ${
-              isFormValid() && !isSubmitting
-                ? 'hover:bg-[#fec555] hover:shadow-lg hover:scale-[1.02] cursor-pointer'
-                : 'opacity-50 cursor-not-allowed'
-            }`}
+            hover:bg-[#fec555] hover:shadow-lg hover:scale-[1.02] cursor-pointer
+            ${isSubmitting ? 'opacity-70 cursor-wait' : ''}
+          `}
           style={{
             fontFamily: 'Poppins, sans-serif',
             fontWeight: '700',
@@ -226,7 +229,7 @@ export function LeadForm({ onSubmit, isSubmitting }: LeadFormProps) {
             boxShadow: 'inset 0 0 0 6px #a2542c',
           }}
         >
-          {isSubmitting ? 'ENVIANDO...' : 'QUERO GARANTIR MINHA VAGA'}
+          {isSubmitting ? 'ENVIANDO...' : 'ENTRAR NO GRUPO AGORA'}
         </button>
       </div>
     </form>
